@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Генератор ссылок · ПРО ЗАКОН</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #fff;
+  }
+  .container {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    color: #1a1a2e;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #FAC775;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1a1a2e;
+    margin-bottom: 5px;
+  }
+  .sub {
+    font-size: 13px;
+    color: #888;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  input, select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #e8e6e0;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border 0.2s;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: #B8860B;
+  }
+  .hint {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+  }
+  .btn {
+    width: 100%;
+    padding: 14px;
+    background: #1a1a2e;
+    color: #FAC775;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .btn:hover {
+    background: #2c2c4a;
+    transform: translateY(-1px);
+  }
+  .result {
+    display: none;
+    margin-top: 24px;
+    padding: 16px;
+    background: #f5f3ed;
+    border-radius: 10px;
+    border-left: 4px solid #B8860B;
+  }
+  .result.show { display: block; }
+  .result-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #B8860B;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .result-link {
+    font-size: 12px;
+    word-break: break-all;
+    color: #1a1a2e;
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e8e6e0;
+    font-family: monospace;
+    margin-bottom: 12px;
+  }
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .action-btn {
+    padding: 10px;
+    border: 1.5px solid #1a1a2e;
+    border-radius: 8px;
+    background: #fff;
+    color: #1a1a2e;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .action-btn:hover {
+    background: #1a1a2e;
+    color: #FAC775;
+  }
+  .action-btn.wa {
+    background: #25D366;
+    border-color: #25D366;
+    color: #fff;
+  }
+  .action-btn.wa:hover {
+    background: #1ea952;
+  }
+  .copy-success {
+    color: #0F6E56;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 10px;
+    text-align: center;
+    display: none;
+  }
+  .copy-success.show { display: block; }
+  .message-template {
+    margin-top: 16px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e8e6e0;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #4a4a4a;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🔗 Генератор ссылок</h1>
+    <p class="sub">ПРО ЗАКОН · Отслеживание клиентов</p>
+  </div>
+
+  <div class="form-group">
+    <label>Имя клиента *</label>
+    <input type="text" id="name" placeholder="Иван Петров" required>
+  </div>
+
+  <div class="form-group">
+    <label>Телефон клиента *</label>
+    <input type="tel" id="phone" placeholder="79161234567" required>
+    <div class="hint">Без + и пробелов, начиная с 7. Например: 79161234567</div>
+  </div>
+
+  <div class="form-group">
+    <label>Менеджер *</label>
+    <select id="manager" required>
+      <option value="">— Выбери менеджера —</option>
+      <option value="Ольга">Ольга Сидоренко</option>
+      <option value="Михаил">Михаил Винтер</option>
+      <option value="Оксана">Оксана Базанова</option>
+      <option value="Другой">Другой (укажи в имени)</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Источник (необязательно)</label>
+    <select id="source">
+      <option value="консультация">После консультации в офисе</option>
+      <option value="звонок">После телефонного звонка</option>
+      <option value="vk">Из ВК</option>
+      <option value="reklama">Реклама</option>
+      <option value="recomendaciya">Рекомендация</option>
+      <option value="club_krona">Клуб КРОНА</option>
+    </select>
+  </div>
+
+  <button class="btn" onclick="generateLink()">Создать ссылку</button>
+
+  <div class="result" id="result">
+    <div class="result-label">Готовая ссылка:</div>
+    <div class="result-link" id="linkDisplay"></div>
+    
+    <div class="actions">
+      <button class="action-btn" onclick="copyLink()">📋 Копировать</button>
+      <a href="#" class="action-btn wa" id="waBtn" target="_blank">💬 Отправить в WhatsApp</a>
+    </div>
+    
+    <div class="copy-success" id="copySuccess">✅ Ссылка скопирована!</div>
+
+    <div class="message-template" id="messageTemplate"></div>
+  </div>
+</div>
+
+<script>
+const BASE_URL = 'https://prozakon54.github.io/prozakon/';
+
+function generateLink() {
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim().replace(/\D/g, '');
+  const manager = document.getElementById('manager').value;
+  const source = document.getElementById('source').value;
+
+  if (!name || !phone || !manager) {
+    alert('Заполни имя, телефон и менеджера');
+    return;
+  }
+
+  if (phone.length !== 11 || !phone.startsWith('7')) {
+    alert('Телефон должен быть 11 цифр, начиная с 7\nНапример: 79161234567');
+    return;
+  }
+
+  // Создаём ссылку
+  const params = new URLSearchParams({
+    name: name,
+    phone: phone,
+    manager: manager,
+    utm_source: source
+  });
+  
+  const link = `${BASE_URL}?${params.toString()}`;
+  
+  // Показываем результат
+  document.getElementById('linkDisplay').textContent = link;
+  document.getElementById('result').classList.add('show');
+  
+  // Готовое сообщение для WhatsApp
+  const message = `${name}, спасибо за встречу! 🤍
+
+Подготовила для вас памятку — всё что мы обсудили:
+👉 ${link}
+
+Изучайте — звоните когда будете готовы.
+📞 8 923 100-55-72`;
+
+  // Кнопка отправки в WhatsApp
+  document.getElementById('waBtn').href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  
+  // Шаблон сообщения
+  document.getElementById('messageTemplate').textContent = '📝 Шаблон сообщения:\n\n' + message;
+}
+
+function copyLink() {
+  const link = document.getElementById('linkDisplay').textContent;
+  
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(link).then(() => {
+      showCopySuccess();
+    });
+  } else {
+    // Fallback для старых браузеров
+    const textarea = document.createElement('textarea');
+    textarea.value = link;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showCopySuccess();
+  }
+}
+
+function showCopySuccess() {
+  const el = document.getElementById('copySuccess');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// Сохраним последнего менеджера в localStorage для удобства
+document.getElementById('manager').addEventListener('change', e => {
+  try { localStorage.setItem('lastManager', e.target.value); } catch(err) {}
+});
+window.addEventListener('load', () => {
+  try {
+    const last = localStorage.getItem('lastManager');
+    if (last) document.getElementById('manager').value = last;
+  } catch(err) {}
+});
+</script>
+
+</body>
+</html>
