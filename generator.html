@@ -60,6 +60,8 @@
     font-size: 15px;
     font-family: inherit;
     transition: border 0.2s;
+    background: #fff;
+    color: #1a1a2e;
   }
   input:focus, select:focus {
     outline: none;
@@ -192,22 +194,11 @@
     <label>Менеджер *</label>
     <select id="manager" required>
       <option value="">— Выбери менеджера —</option>
-      <option value="Ольга">Ольга Сидоренко</option>
-      <option value="Михаил">Михаил Винтер</option>
-      <option value="Оксана">Оксана Базанова</option>
-      <option value="Другой">Другой (укажи в имени)</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label>Источник (необязательно)</label>
-    <select id="source">
-      <option value="консультация">После консультации в офисе</option>
-      <option value="звонок">После телефонного звонка</option>
-      <option value="vk">Из ВК</option>
-      <option value="reklama">Реклама</option>
-      <option value="recomendaciya">Рекомендация</option>
-      <option value="club_krona">Клуб КРОНА</option>
+      <option value="Ольга РОП">Ольга — РОП</option>
+      <option value="Данил Кемерово">Данил — Кемерово</option>
+      <option value="Таисия Кемерово">Таисия — Кемерово</option>
+      <option value="Яна Новосибирск">Яна — Новосибирск</option>
+      <option value="Салтанат Дист">Салтанат — Дистанционно</option>
     </select>
   </div>
 
@@ -235,7 +226,6 @@ function generateLink() {
   const name = document.getElementById('name').value.trim();
   const phone = document.getElementById('phone').value.trim().replace(/\D/g, '');
   const manager = document.getElementById('manager').value;
-  const source = document.getElementById('source').value;
 
   if (!name || !phone || !manager) {
     alert('Заполни имя, телефон и менеджера');
@@ -251,8 +241,7 @@ function generateLink() {
   const params = new URLSearchParams({
     name: name,
     phone: phone,
-    manager: manager,
-    utm_source: source
+    manager: manager
   });
   
   const link = `${BASE_URL}?${params.toString()}`;
@@ -285,7 +274,6 @@ function copyLink() {
       showCopySuccess();
     });
   } else {
-    // Fallback для старых браузеров
     const textarea = document.createElement('textarea');
     textarea.value = link;
     document.body.appendChild(textarea);
@@ -302,7 +290,7 @@ function showCopySuccess() {
   setTimeout(() => el.classList.remove('show'), 2500);
 }
 
-// Сохраним последнего менеджера в localStorage для удобства
+// Запоминаем последнего менеджера для удобства
 document.getElementById('manager').addEventListener('change', e => {
   try { localStorage.setItem('lastManager', e.target.value); } catch(err) {}
 });
